@@ -1,0 +1,11 @@
+echo [theme]
+echo base="dark"
+echo primaryColor="#0088cc"
+echo backgroundColor="#1c1e21"
+echo secondaryBackgroundColor="#242a31"
+echo textColor="#ffffff"
+echo font="sans serif"
+
+echo.
+echo [server]
+echo maxUploadSize=200
