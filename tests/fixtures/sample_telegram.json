@@ -1,0 +1,25 @@
+{
+  "name": "Test Chat",
+  "type": "personal_chat",
+  "messages": [
+    {
+      "id": 1,
+      "type": "message",
+      "date": "2024-01-15T10:30:00",
+      "from": "Abhishek",
+      "text": "Hey!"
+    },
+    {
+      "id": 2,
+      "type": "service",
+      "action": "pin_message"
+    },
+    {
+      "id": 3,
+      "type": "message",
+      "date": "2024-01-15T10:31:00",
+      "from": "Priya",
+      "text": ["Check ", {"type": "bold", "text": "this"}, " out"]
+    }
+  ]
+}
