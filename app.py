@@ -7,7 +7,7 @@ from ui.overview import render_overview_tab
 from ui.activity import render_activity_tab
 from ui.words import render_words_tab
 from ui.search import render_search_tab
-
+from ui.emoji_tab import render_emoji_tab
 
 st.set_page_config(
     page_title="ChatLens — Chat Analytics Dashboard",
@@ -88,9 +88,9 @@ def main():
 
     with tab_search:
         render_search_tab(df)
-
+    
     with tab_emoji:
-        st.write("Emoji analytics coming in Step 14.")
+        render_emoji_tab(df)
 
 
 if __name__ == "__main__":
