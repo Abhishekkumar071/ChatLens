@@ -4,6 +4,7 @@ from parsers.telegram import parse_telegram_json
 from parsers.whatsapp import parse_whatsapp_txt
 from processing.enrich import messages_to_dataframe
 from ui.overview import render_overview_tab
+from ui.activity import render_activity_tab
 
 st.set_page_config(
     page_title="ChatLens — Chat Analytics Dashboard",
@@ -77,7 +78,7 @@ def main():
         render_overview_tab(df)
 
     with tab_activity:
-        st.write("Activity timeline coming in Step 11.")
+        render_activity_tab(df)
 
     with tab_words:
         st.write("Word analysis coming in Step 12.")
