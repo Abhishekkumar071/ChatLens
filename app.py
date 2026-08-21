@@ -6,6 +6,8 @@ from processing.enrich import messages_to_dataframe
 from ui.overview import render_overview_tab
 from ui.activity import render_activity_tab
 from ui.words import render_words_tab
+from ui.search import render_search_tab
+
 
 st.set_page_config(
     page_title="ChatLens — Chat Analytics Dashboard",
@@ -85,7 +87,7 @@ def main():
         render_words_tab(df)
 
     with tab_search:
-        st.write("Word searcher coming in Step 13.")
+        render_search_tab(df)
 
     with tab_emoji:
         st.write("Emoji analytics coming in Step 14.")
