@@ -3,6 +3,7 @@ import streamlit as st
 from parsers.telegram import parse_telegram_json
 from parsers.whatsapp import parse_whatsapp_txt
 from processing.enrich import messages_to_dataframe
+from ui.overview import render_overview_tab
 
 st.set_page_config(
     page_title="ChatLens — Chat Analytics Dashboard",
@@ -68,9 +69,12 @@ def main():
         ["📊 Overview", "📈 Activity", "☁️ Words", "🔍 Search", "😂 Emoji"]
     )
 
+    # with tab_overview:
+    #     st.write(f"Loaded **{len(df)}** messages. (Real stats coming in Step 10.)")
+    #     st.dataframe(df.head())
+
     with tab_overview:
-        st.write(f"Loaded **{len(df)}** messages. (Real stats coming in Step 10.)")
-        st.dataframe(df.head())
+        render_overview_tab(df)
 
     with tab_activity:
         st.write("Activity timeline coming in Step 11.")
