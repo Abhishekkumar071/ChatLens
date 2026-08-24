@@ -26,6 +26,8 @@ def _flatten_text(raw_text: Union[str, list]) -> str:
     return ""
 
 
+# parsers/telegram.py — parse_telegram_json() ke start mein add karo
+
 def parse_telegram_json(file_content: bytes) -> list[Message]:
     """
     Parses a raw Telegram JSON export (as bytes, e.g. from a Streamlit
@@ -35,6 +37,15 @@ def parse_telegram_json(file_content: bytes) -> list[Message]:
     aren't real conversational messages.
     """
     data = json.loads(file_content)
+
+    if not isinstance(data, dict):
+        raise ValueError("Invalid Telegram export format — expected a JSON object at the root.")
+
+    raw_messages = data.get("messages", [])
+    if not isinstance(raw_messages, list):
+        raise ValueError("Invalid Telegram export format — 'messages' field is missing or malformed.")
+
+    # ... baaki function same rahega
     raw_messages = data.get("messages", [])
 
     parsed: list[Message] = []

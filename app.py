@@ -16,22 +16,77 @@ st.set_page_config(
 )
 
 
+# def parse_uploaded_file(uploaded_file) -> "pd.DataFrame":
+#     """
+#     Detects platform from file extension and routes to the correct
+#     parser, then runs the result through the enrichment pipeline.
+#     """
+#     file_bytes = uploaded_file.read()
+
+#     if uploaded_file.name.endswith(".json"):
+#         messages = parse_telegram_json(file_bytes)
+#     elif uploaded_file.name.endswith(".txt"):
+#         messages = parse_whatsapp_txt(file_bytes)
+#     else:
+#         st.error("Unsupported file type. Please upload a Telegram (.json) or WhatsApp (.txt) export.")
+#         return None
+
+#     return messages_to_dataframe(messages)
+
+# # app.py — parse_uploaded_file() ko replace karo is version se
+
+import json
+
+MAX_REASONABLE_SIZE_MB = 200
+
+
 def parse_uploaded_file(uploaded_file) -> "pd.DataFrame":
     """
     Detects platform from file extension and routes to the correct
-    parser, then runs the result through the enrichment pipeline.
+    parser. Wrapped in error handling so any unexpected failure
+    (corrupted file, wrong format, encoding issue) shows the user a
+    clean message instead of crashing the app with a raw traceback.
     """
     file_bytes = uploaded_file.read()
 
-    if uploaded_file.name.endswith(".json"):
-        messages = parse_telegram_json(file_bytes)
-    elif uploaded_file.name.endswith(".txt"):
-        messages = parse_whatsapp_txt(file_bytes)
-    else:
-        st.error("Unsupported file type. Please upload a Telegram (.json) or WhatsApp (.txt) export.")
+    # --- Guard: empty file ---
+    if len(file_bytes) == 0:
+        st.error("This file appears to be empty. Please upload a valid chat export.")
         return None
 
-    return messages_to_dataframe(messages)
+    # --- Guard: unreasonably large (defense-in-depth beyond config.toml limit) ---
+    size_mb = len(file_bytes) / (1024 * 1024)
+    if size_mb > MAX_REASONABLE_SIZE_MB:
+        st.error(f"File is too large ({size_mb:.1f}MB). Please upload a file under {MAX_REASONABLE_SIZE_MB}MB.")
+        return None
+
+    try:
+        if uploaded_file.name.endswith(".json"):
+            messages = parse_telegram_json(file_bytes)
+        elif uploaded_file.name.endswith(".txt"):
+            messages = parse_whatsapp_txt(file_bytes)
+        else:
+            st.error("Unsupported file type. Please upload a Telegram (.json) or WhatsApp (.txt) export.")
+            return None
+    except json.JSONDecodeError:
+        st.error("This doesn't look like a valid Telegram JSON export — the file couldn't be parsed as JSON.")
+        return None
+    except UnicodeDecodeError:
+        st.error("This file's encoding couldn't be read. Please make sure it's a plain text export.")
+        return None
+    except Exception:
+        # Last-resort safety net: never let an unexpected error crash
+        # the app with a raw traceback in front of the user.
+        st.error("Something went wrong while processing this file. Please make sure it's a valid, unmodified chat export.")
+        return None
+
+    df = messages_to_dataframe(messages)
+
+    if df.empty:
+        st.warning("No valid messages could be found in this file. It may be empty, corrupted, or in an unsupported format.")
+        return None
+
+    return df
 
 
 def main():
