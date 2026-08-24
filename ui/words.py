@@ -9,6 +9,7 @@ import plotly.express as px
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+import streamlit as st
 
 
 def _ensure_nltk_data():
@@ -29,7 +30,7 @@ def _ensure_nltk_data():
         except LookupError:
             nltk.download(package, quiet=True)
 
-
+@st.cache_data(show_spinner=False)
 def _get_word_frequencies(df: pd.DataFrame, min_word_length: int = 2) -> Counter:
     """
     Tokenizes all non-media message text, lowercases it, strips

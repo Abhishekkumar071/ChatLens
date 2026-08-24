@@ -5,6 +5,7 @@ from pydantic import BaseModel, field_validator
 
 
 class Message(BaseModel):
+    model_config = {"frozen": True}  # ye line — makes it hashable
     """
     Canonical representation of a single chat message,
     regardless of which platform it originated from.
