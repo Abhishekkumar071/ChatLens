@@ -81,11 +81,22 @@ def parse_whatsapp_txt(file_content: bytes) -> list[Message]:
                 skipped += 1
                 continue
         else:
-            # No timestamp match -> this line is a continuation of
-            # the previous message (a line break within one message).
+            # # No timestamp match -> this line is a continuation of
+            # # the previous message (a line break within one message).
+            # if parsed:
+            #     parsed[-1].text += f"\n{line}"
+            # else:
+            #     skipped += 1  # stray line before any real message
             if parsed:
-                parsed[-1].text += f"\n{line}"
+                # Message is frozen (immutable) — we can't mutate .text directly.
+                # model_copy(update=...) creates a NEW Message with the text field
+                # updated, leaving the original untouched, and we replace the
+                # last list entry with this new version.
+                updated_message = parsed[-1].model_copy(
+                    update={"text": parsed[-1].text + f"\n{line}"}
+                )
+                parsed[-1] = updated_message
             else:
-                skipped += 1  # stray line before any real message
+                skipped += 1
 
     return parsed

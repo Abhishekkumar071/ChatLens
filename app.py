@@ -77,6 +77,7 @@ def parse_uploaded_file(uploaded_file) -> "pd.DataFrame":
     except Exception:
         # Last-resort safety net: never let an unexpected error crash
         # the app with a raw traceback in front of the user.
+        traceback.print_exc()   # TEMPORARY — terminal mein pura error dikhayega
         st.error("Something went wrong while processing this file. Please make sure it's a valid, unmodified chat export.")
         return None
 
