@@ -56,7 +56,8 @@ def _get_word_frequencies(df: pd.DataFrame, min_word_length: int = 2) -> Counter
 def render_words_tab(df: pd.DataFrame):
     st.subheader("☁️ Word Analysis")
 
-    word_freq = _get_word_frequencies(df)
+    # word_freq = _get_word_frequencies(df)
+    word_freq = _get_word_frequencies(df[["text", "is_media"]])
 
     if not word_freq:
         st.info("Not enough text data to analyze (mostly media messages?).")

@@ -6,4 +6,5 @@ venv/
 .streamlit/secrets.toml
 *.egg-info/
 .DS_Store
-.streamlit/config.tomllarge_sample.txt
+.streamlit/config.toml
+large_sample.txt

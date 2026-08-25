@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.pytest_cache/
+tests/
+large_sample.txt
+scripts/
+.streamlit/secrets.toml
+README.md
+VIDEO_SCRIPT.md
