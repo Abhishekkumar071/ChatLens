@@ -1,6 +1,55 @@
+<div align="center">
+
 # 💬 ChatLens — Chat Analytics Dashboard
 
+<p><strong>Turn your conversations into patterns, peaks, and personality.</strong></p>
+
+<p>
+     <a href="https://github.com/Abhishekkumar071/ChatLens"><img src="https://img.shields.io/badge/status-active-2ea44f?style=for-the-badge" alt="Project status: active"></a>
+     <a href="https://streamlit.io/"><img src="https://img.shields.io/badge/built%20with-Streamlit-ff4b4b?style=for-the-badge&logo=streamlit&logoColor=white" alt="Built with Streamlit"></a>
+     <a href="https://github.com/Abhishekkumar071/ChatLens/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-111827?style=for-the-badge" alt="MIT License"></a>
+</p>
+
+</div>
+
 **ChatLens** turns your exported Telegram or WhatsApp chat history into an interactive analytics dashboard — message trends, activity heatmaps, word clouds, a word search engine, and emoji leaderboards. Everything runs **locally**: your chat data is parsed and analyzed on your own machine and never sent to any external server.
+
+<p align="center">
+     <a href="#-features">Features</a> ·
+     <a href="#-preview">Preview</a> ·
+     <a href="#-how-to-export-your-chats">Export chats</a> ·
+     <a href="#-installation--setup">Run locally</a> ·
+     <a href="#-running-tests">Tests</a>
+</p>
+
+---
+
+## 🖼️ Preview
+
+<p align="center">
+     <a href="outPut_Image/overView_HomePage.png">
+          <img src="outPut_Image/overView_HomePage.png" alt="ChatLens overview dashboard" width="920">
+     </a>
+</p>
+
+<details>
+<summary><strong>Explore every analytics view</strong> · click to expand</summary>
+
+<table>
+     <tr>
+          <td align="center" width="50%"><a href="outPut_Image/activityOvertimeGraph.png"><img src="outPut_Image/activityOvertimeGraph.png" alt="Activity over time" width="100%"></a><br><sub>Activity over time</sub></td>
+          <td align="center" width="50%"><a href="outPut_Image/activityByday%26hour.png"><img src="outPut_Image/activityByday%26hour.png" alt="Activity by day and hour" width="100%"></a><br><sub>Activity by day and hour</sub></td>
+     </tr>
+     <tr>
+          <td align="center"><a href="outPut_Image/weekendActivityHeatmap.png"><img src="outPut_Image/weekendActivityHeatmap.png" alt="Weekly activity heatmap" width="100%"></a><br><sub>Weekly activity heatmap</sub></td>
+          <td align="center"><a href="outPut_Image/wordAnanlysis.png"><img src="outPut_Image/wordAnanlysis.png" alt="Word analysis" width="100%"></a><br><sub>Word analysis</sub></td>
+     </tr>
+     <tr>
+          <td align="center"><a href="outPut_Image/wordSercher.png"><img src="outPut_Image/wordSercher.png" alt="Word searcher" width="100%"></a><br><sub>Word searcher</sub></td>
+          <td align="center"><a href="outPut_Image/emojisAnalysis.png"><img src="outPut_Image/emojisAnalysis.png" alt="Emoji analytics" width="100%"></a><br><sub>Emoji analytics</sub></td>
+     </tr>
+</table>
+</details>
 
 ---
 
