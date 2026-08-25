@@ -36,4 +36,5 @@ HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 # Streamlit binds only to localhost INSIDE the container, which
 # makes it unreachable from outside — a very common Docker+Streamlit
 # beginner mistake.
-CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+# CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+CMD ["python", "-m", "streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501"]
