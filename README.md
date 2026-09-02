@@ -6,9 +6,12 @@
 
 <p>
      <a href="https://github.com/Abhishekkumar071/ChatLens"><img src="https://img.shields.io/badge/status-active-2ea44f?style=for-the-badge" alt="Project status: active"></a>
-     <a href="https://streamlit.io/"><img src="https://img.shields.io/badge/built%20with-Streamlit-ff4b4b?style=for-the-badge&logo=streamlit&logoColor=white" alt="Built with Streamlit"></a>
+     <a href="https://chatlens-8n5w26abhi.streamlit.app/"><img src="https://img.shields.io/badge/demo-live-ff4b4b?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live demo"></a>
+     <a href="https://github.com/Abhishekkumar071/ChatLens/actions"><img src="https://img.shields.io/badge/CI-passing-2ea44f?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI passing"></a>
      <a href="https://github.com/Abhishekkumar071/ChatLens/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-111827?style=for-the-badge" alt="MIT License"></a>
 </p>
+
+**[🌐 Try the live demo →](https://chatlens-8n5w26abhi.streamlit.app/)**
 
 </div>
 
@@ -19,7 +22,8 @@
      <a href="#-preview">Preview</a> ·
      <a href="#-how-to-export-your-chats">Export chats</a> ·
      <a href="#-installation--setup">Run locally</a> ·
-     <a href="#-running-tests">Tests</a>
+     <a href="#-running-tests">Tests</a> ·
+     <a href="#-deployment--engineering">Engineering</a>
 </p>
 
 ---
@@ -79,7 +83,7 @@ Extracts and counts every emoji used, showing overall top emojis, a per-person e
 ChatLens is built as a modular pipeline rather than a single script:
 
 ```
-Raw Export (.json / .txt)
+  Raw Export (.json / .txt)
         │
         ▼
      parsers/          →  Platform-specific parsing (Telegram JSON / WhatsApp TXT)
@@ -89,10 +93,10 @@ Raw Export (.json / .txt)
         |                 emoji extraction — one shared enriched DataFrame
         ▼
        ui/                →  Five independent tab modules, each consuming
-        |                  the same DataFrame (Overview, Activity, Words,Search, Emoji)
+        |                     the same DataFrame (Overview, Activity, Words,Search, Emoji)
         ▼
-     app.py             →  Thin orchestration layer — upload handling,
-                          session state, tab routing
+      app.py             →  Thin orchestration layer — upload handling,
+                          session state, tab routing, error handling, logging
 ```
 
 **Why this matters:** parsing logic, data validation, and UI rendering are fully decoupled. Adding support for a new chat platform means writing one new parser — nothing else in the app changes.
@@ -104,12 +108,15 @@ Raw Export (.json / .txt)
 | Layer | Tools |
 |---|---|
 | UI / Framework | [Streamlit](https://streamlit.io/) |
-| Data Validation | [Pydantic](https://docs.pydantic.dev/) |
+| Data Validation | [Pydantic](https://docs.pydantic.dev/) (frozen, hashable models) |
 | Data Processing | [Pandas](https://pandas.pydata.org/) |
 | Visualization | [Plotly](https://plotly.com/python/), [WordCloud](https://github.com/amueller/word_cloud), Matplotlib |
 | NLP | [NLTK](https://www.nltk.org/) |
 | Emoji Parsing | [emoji](https://pypi.org/project/emoji/) |
 | Testing | [pytest](https://pytest.org/) |
+| Containerization | [Docker](https://www.docker.com/) |
+| CI/CD | [GitHub Actions](https://github.com/features/actions) (lint + test on every push) |
+| Deployment | [Streamlit Community Cloud](https://streamlit.io/cloud) |
 
 ---
 
@@ -132,10 +139,10 @@ Raw Export (.json / .txt)
 
 ## 🚀 Installation & Setup
 
+### Option A — Run locally
 ```bash
 # 1. Clone the repository
 git clone https://github.com/Abhishekkumar071/ChatLens.git
-
 cd ChatLens
 
 # 2. Create and activate a virtual environment
@@ -149,8 +156,16 @@ pip install -r requirements.txt
 # 4. Run the app
 streamlit run app.py
 ```
-
 The dashboard opens automatically at `http://localhost:8501`.
+
+### Option B — Run with Docker
+```bash
+docker build -t chatlens:latest .
+docker run -p 8501:8501 chatlens:latest
+```
+
+### Option C — Just use the live demo
+No install needed → **[chatlens-8n5w26abhi.streamlit.app](https://chatlens-8n5w26abhi.streamlit.app/)**
 
 ---
 
@@ -160,7 +175,7 @@ The dashboard opens automatically at `http://localhost:8501`.
 pytest -v
 ```
 
-Parsers and the preprocessing pipeline are covered with a `pytest` suite using synthetic fixture files (no real chat data required to run tests).
+Parsers and the preprocessing pipeline are covered with a `pytest` suite using synthetic fixture files (no real chat data required to run tests). Every push and pull request also runs this suite automatically via GitHub Actions, along with `ruff` linting.
 
 ---
 
@@ -168,44 +183,66 @@ Parsers and the preprocessing pipeline are covered with a `pytest` suite using s
 
 ```
 ChatLens/
-├── app.py                  # Entry point — upload handling & tab routing
-├── models.py                # Message data model (Pydantic)
+├── app.py                    # Entry point — upload handling, tab routing, error handling, logging
+├── models.py                  # Message data model (Pydantic, immutable/hashable)
 ├── parsers/
-│   ├── telegram.py          # Telegram JSON parser
-│   └── whatsapp.py          # WhatsApp TXT parser (multi-line, regional dates)
+│   ├── telegram.py            # Telegram JSON parser
+│   └── whatsapp.py            # WhatsApp TXT parser (multi-line, regional dates)
 ├── processing/
-│   └── enrich.py            # Feature engineering pipeline
+│   └── enrich.py               # Feature engineering pipeline (cached)
 ├── ui/
 │   ├── overview.py
 │   ├── activity.py
 │   ├── words.py
 │   ├── search.py
 │   └── emoji_tab.py
-├── tests/                   # pytest suite + fixtures
+├── tests/                      # pytest suite + fixtures
+├── .github/workflows/
+│   └── ci.yml                   # Automated lint + test on every push
 ├── .streamlit/
-│   └── config.toml          # Dark theme configuration
+│   └── config.toml               # Dark theme configuration
+├── Dockerfile
 ├── requirements.txt
 └── pytest.ini
 ```
 
 ---
 
+## 🔒 Deployment & Engineering
+
+ChatLens isn't just a script — it's built and shipped like a real product:
+
+- ✅ **Validated data pipeline** — Pydantic models catch malformed data at the boundary, not deep inside a chart function
+- ✅ **Tested** — `pytest` suite covering both parsers and the preprocessing pipeline
+- ✅ **Cached** — `st.cache_data` avoids redundant recomputation, stays responsive on 50k+ message chats
+- ✅ **Hardened** — graceful handling of malformed/empty/oversized uploads, no raw tracebacks shown to users, server-side error logging
+- ✅ **Containerized** — a working `Dockerfile` for reproducible, portable deployment
+- ✅ **Continuously integrated** — every push runs linting (`ruff`) and the full test suite via GitHub Actions
+- ✅ **Live deployed** — [chatlens-8n5w26abhi.streamlit.app](https://chatlens-8n5w26abhi.streamlit.app/)
+
+---
+
 ## 🔮 Future Scope
 
-The core dashboard (upload → parse → 5 analytics tabs) is complete and fully tested. Planned next steps:
+The app is fully functional, tested, and live. Ideas being considered next:
 
-- [ ] **Caching & Performance** — `st.cache_data` wiring, stress-tested against 50k+ message chats
-- [ ] **Error Handling & Security** — graceful handling of malformed files, upload limits, input sanitization
-- [ ] **Dockerization** — containerized deployment
-- [ ] **CI/CD Pipeline** — automated lint + test on every push (GitHub Actions)
-- [ ] **Production Deployment** — live hosted demo (Streamlit Community Cloud)
-- [ ] **Polish** — expanded docs, contribution guide, and (potential) AI-powered chat summarization
+- [ ] **Multi-platform support** — Discord and Instagram DM exports
+- [ ] **AI-powered chat summarization** — optional LLM-based "what happened this week" summary
+- [ ] **Exportable reports** — download a PDF/image summary of the dashboard
+- [ ] **Group chat mode improvements** — better handling for chats with 10+ participants
+- [ ] **Custom date-range filtering** — analyze a specific time window instead of the whole history
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and guidelines.
 
 ---
 
 ## 💻 Privacy
 
-ChatLens runs entirely on your local machine. No chat data is ever uploaded to an external server, logged, or stored beyond your current browser session.
+ChatLens runs entirely on your local machine (or your own deployed instance). No chat data is uploaded to any third-party server, logged externally, or stored beyond your current session.
 
 ---
 
@@ -214,8 +251,5 @@ ChatLens runs entirely on your local machine. No chat data is ever uploaded to a
 MIT License — free to use, modify, and build on.
 
 ---
-## 🤝 Contributing
-
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and guidelines.
 
 <p align="center">Built with ❤️ — a chat analytics dashboard, from scratch to production.<br>⭐ Star this repo if you find it useful!</p>
