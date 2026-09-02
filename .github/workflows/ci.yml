@@ -1,0 +1,43 @@
+name: CI
+
+# Trigger: yeh workflow har push aur pull request pe chalega,
+# main branch ke against
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: repo code ko runner machine pe checkout karo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Python setup karo (same version jo hum locally use kar rahe hain)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Step 3: dependencies install karo
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install ruff pytest
+
+      # Step 4: NLTK data pre-download karo (Step 12/17 jaisa hi reasoning —
+      # bina iske word-analysis tests fail ho sakte hain CI environment mein)
+      - name: Download NLTK data
+        run: python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt_tab')"
+
+      # Step 5: linter chalao — code quality issues pakadne ke liye
+      - name: Run Ruff linter
+        run: ruff check .
+
+      # Step 6: test suite chalao — sabse important check
+      - name: Run tests
+        run: pytest -v

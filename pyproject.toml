@@ -1,0 +1,7 @@
+# pyproject.toml
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F"]  # E = style errors, F = actual bugs (unused imports, undefined names)
+ignore = ["E501"]     # line-too-long ignore kiya — abhi strict formatting zaroori nahi
