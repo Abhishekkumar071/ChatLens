@@ -1,5 +1,7 @@
 # app.py
+import pandas as pd
 import streamlit as st
+import json
 from parsers.telegram import parse_telegram_json
 from parsers.whatsapp import parse_whatsapp_txt
 from processing.enrich import messages_to_dataframe
@@ -35,7 +37,7 @@ st.set_page_config(
 
 # # app.py — parse_uploaded_file() ko replace karo is version se
 
-import json
+
 
 MAX_REASONABLE_SIZE_MB = 200
 
@@ -75,9 +77,6 @@ def parse_uploaded_file(uploaded_file) -> "pd.DataFrame":
         st.error("This file's encoding couldn't be read. Please make sure it's a plain text export.")
         return None
     except Exception:
-        # Last-resort safety net: never let an unexpected error crash
-        # the app with a raw traceback in front of the user.
-        traceback.print_exc()   # TEMPORARY — terminal mein pura error dikhayega
         st.error("Something went wrong while processing this file. Please make sure it's a valid, unmodified chat export.")
         return None
 

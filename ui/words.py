@@ -1,7 +1,6 @@
 # ui/words.py
 import streamlit as st
 import pandas as pd
-import re
 from collections import Counter
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -9,7 +8,6 @@ import plotly.express as px
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-import streamlit as st
 
 
 def _ensure_nltk_data():
