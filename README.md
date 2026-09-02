@@ -82,17 +82,16 @@ ChatLens is built as a modular pipeline rather than a single script:
 Raw Export (.json / .txt)
         │
         ▼
-   parsers/          →  Platform-specific parsing (Telegram JSON / WhatsApp TXT)
+     parsers/          →  Platform-specific parsing (Telegram JSON / WhatsApp TXT)
         │                Outputs validated Message objects (Pydantic)
         ▼
    processing/        →  Feature engineering: word counts, timestamps,
-                          emoji extraction — one shared enriched DataFrame
+        |                 emoji extraction — one shared enriched DataFrame
         ▼
-   ui/                →  Five independent tab modules, each consuming
-                          the same DataFrame (Overview, Activity, Words,
-                          Search, Emoji)
+       ui/                →  Five independent tab modules, each consuming
+        |                  the same DataFrame (Overview, Activity, Words,Search, Emoji)
         ▼
-   app.py             →  Thin orchestration layer — upload handling,
+     app.py             →  Thin orchestration layer — upload handling,
                           session state, tab routing
 ```
 
@@ -215,5 +214,8 @@ ChatLens runs entirely on your local machine. No chat data is ever uploaded to a
 MIT License — free to use, modify, and build on.
 
 ---
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and guidelines.
 
 <p align="center">Built with ❤️ — a chat analytics dashboard, from scratch to production.<br>⭐ Star this repo if you find it useful!</p>

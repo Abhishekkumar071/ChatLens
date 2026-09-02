@@ -10,6 +10,15 @@ from ui.activity import render_activity_tab
 from ui.words import render_words_tab
 from ui.search import render_search_tab
 from ui.emoji_tab import render_emoji_tab
+# app.py — top mein, imports ke baad add karo
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
+
 
 st.set_page_config(
     page_title="ChatLens — Chat Analytics Dashboard",
@@ -17,30 +26,7 @@ st.set_page_config(
     layout="wide",
 )
 
-
-# def parse_uploaded_file(uploaded_file) -> "pd.DataFrame":
-#     """
-#     Detects platform from file extension and routes to the correct
-#     parser, then runs the result through the enrichment pipeline.
-#     """
-#     file_bytes = uploaded_file.read()
-
-#     if uploaded_file.name.endswith(".json"):
-#         messages = parse_telegram_json(file_bytes)
-#     elif uploaded_file.name.endswith(".txt"):
-#         messages = parse_whatsapp_txt(file_bytes)
-#     else:
-#         st.error("Unsupported file type. Please upload a Telegram (.json) or WhatsApp (.txt) export.")
-#         return None
-
-#     return messages_to_dataframe(messages)
-
-# # app.py — parse_uploaded_file() ko replace karo is version se
-
-
-
 MAX_REASONABLE_SIZE_MB = 200
-
 
 def parse_uploaded_file(uploaded_file) -> "pd.DataFrame":
     """
